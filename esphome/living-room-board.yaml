@@ -1,0 +1,115 @@
+# ESPHome Firmware — Living Room Board (Board 1)
+# This EXACT file gets flashed to the ESP32 4-Channel Relay
+# When hardware arrives: plug USB → flash → wire → done
+
+esphome:
+  name: living-room-board
+  friendly_name: "Living Room Board"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# WiFi Configuration — change to your home WiFi
+wifi:
+  ssid: "YOUR_WIFI_SSID"
+  password: "YOUR_WIFI_PASSWORD"
+  
+  # Fallback hotspot if WiFi fails
+  ap:
+    ssid: "LivingRoom-Fallback"
+    password: "fallback123"
+
+# Enable captive portal for fallback
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API (auto-discovery)
+api:
+  encryption:
+    key: "M9YAK5gA//6vqpgVpSlu9/mzZlz23fpaUAQvwORTPe8="
+
+# Enable OTA updates (update firmware wirelessly after first flash)
+ota:
+  - platform: esphome
+    password: "ota_password_change_me"
+
+# MQTT as backup communication (works even without HA API)
+mqtt:
+  broker: "YOUR_HA_SERVER_IP"
+  port: 1883
+  topic_prefix: "home/living_room"
+
+# ============================================
+# GPIO Pin Mapping for ESP32 4-Channel Relay
+# These are the ACTUAL pins on the relay board
+# ============================================
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO16
+      inverted: true  # Most relay boards are active-low
+    name: "Living Room Main Light"
+    id: relay_1
+    icon: "mdi:ceiling-light"
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    pin:
+      number: GPIO17
+      inverted: true
+    name: "Living Room Accent Light"
+    id: relay_2
+    icon: "mdi:lamp"
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    pin:
+      number: GPIO18
+      inverted: true
+    name: "Living Room Ceiling Fan"
+    id: relay_3
+    icon: "mdi:fan"
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: gpio
+    pin:
+      number: GPIO19
+      inverted: true
+    name: "Living Room TV Plug"
+    id: relay_4
+    icon: "mdi:television"
+    restore_mode: RESTORE_DEFAULT_OFF
+
+# ============================================
+# Status LED — shows WiFi connection status
+# ============================================
+status_led:
+  pin:
+    number: GPIO2
+    inverted: false
+
+# ============================================
+# Sensors — report board health to HA
+# ============================================
+sensor:
+  - platform: wifi_signal
+    name: "Living Room WiFi Signal"
+    update_interval: 60s
+
+  - platform: uptime
+    name: "Living Room Board Uptime"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "Living Room Board IP"
+    ssid:
+      name: "Living Room Board SSID"
+
+binary_sensor:
+  - platform: status
+    name: "Living Room Board Status"

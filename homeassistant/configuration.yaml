@@ -1,0 +1,290 @@
+# Home Assistant Configuration
+# Aniket's Smart Home — Virtual Test Environment
+
+homeassistant:
+  name: "Aniket's Smart Home"
+  unit_system: metric
+  currency: INR
+  country: IN
+  time_zone: "Asia/Kolkata"
+  external_url: "http://YOUR_SERVER_IP:8503"
+  internal_url: "http://localhost:8503"
+
+default_config:
+
+lovelace:
+  mode: yaml
+  resources: []
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+    - 10.0.0.0/8
+
+# MQTT: Configure via UI → Settings → Integrations → Add MQTT
+# Broker: mosquitto, Port: 1883
+
+logger:
+  default: info
+
+# ============================================
+# INPUT BOOLEANS — State for 25 virtual switches + lock
+# ============================================
+input_boolean:
+  living_room_light_1:
+    name: Living Room Main Light
+    icon: mdi:ceiling-light
+  living_room_light_2:
+    name: Living Room Accent Light
+    icon: mdi:lamp
+  living_room_fan:
+    name: Living Room Fan
+    icon: mdi:fan
+  living_room_tv:
+    name: Living Room TV Plug
+    icon: mdi:television
+  bedroom1_light:
+    name: Bedroom 1 Light
+    icon: mdi:ceiling-light
+  bedroom1_fan:
+    name: Bedroom 1 Fan
+    icon: mdi:fan
+  bedroom1_nightlamp:
+    name: Bedroom 1 Night Lamp
+    icon: mdi:desk-lamp
+  bedroom1_ac:
+    name: Bedroom 1 AC
+    icon: mdi:air-conditioner
+  bedroom2_light:
+    name: Bedroom 2 Light
+    icon: mdi:ceiling-light
+  bedroom2_fan:
+    name: Bedroom 2 Fan
+    icon: mdi:fan
+  bedroom2_nightlamp:
+    name: Bedroom 2 Night Lamp
+    icon: mdi:desk-lamp
+  bedroom2_spare:
+    name: Bedroom 2 Spare
+    icon: mdi:power-socket-eu
+  bedroom3_light:
+    name: Bedroom 3 Light
+    icon: mdi:ceiling-light
+  bedroom3_fan:
+    name: Bedroom 3 Fan
+    icon: mdi:fan
+  bedroom3_light2:
+    name: Bedroom 3 Light 2
+    icon: mdi:wall-sconce-flat
+  bedroom3_spare:
+    name: Bedroom 3 Spare
+    icon: mdi:power-socket-eu
+  kitchen_light_1:
+    name: Kitchen Main Light
+    icon: mdi:ceiling-light
+  kitchen_light_2:
+    name: Kitchen Counter Light
+    icon: mdi:light-recessed
+  kitchen_exhaust:
+    name: Kitchen Exhaust Fan
+    icon: mdi:fan
+  kitchen_spare:
+    name: Kitchen Spare
+    icon: mdi:power-socket-eu
+  bathroom_light:
+    name: Bathroom Light
+    icon: mdi:lightbulb
+  geyser:
+    name: Geyser
+    icon: mdi:water-boiler
+  utility_light:
+    name: Utility Light
+    icon: mdi:lightbulb
+  wash_area:
+    name: Wash Area Light
+    icon: mdi:lightbulb
+  porch_light:
+    name: Porch Light
+    icon: mdi:outdoor-lamp
+  balcony_light:
+    name: Balcony Light
+    icon: mdi:outdoor-lamp
+  corridor_light:
+    name: Corridor Light
+    icon: mdi:lightbulb
+  front_door_locked:
+    name: Front Door Lock State
+    icon: mdi:lock
+    initial: true
+
+# AC Target temps
+input_number:
+  bedroom1_ac_temp:
+    name: Bedroom 1 AC Target
+    min: 16
+    max: 30
+    step: 1
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    initial: 24
+  bedroom2_ac_temp:
+    name: Bedroom 2 AC Target
+    min: 16
+    max: 30
+    step: 1
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    initial: 24
+
+# ============================================
+# VIRTUAL SENSORS
+# ============================================
+template:
+  - sensor:
+      - name: "Living Room Temperature"
+        unit_of_measurement: "°C"
+        state: "{{ (28 + (range(-20, 20) | random) / 10) | round(1) }}"
+        device_class: temperature
+      - name: "Bedroom 1 Temperature"
+        unit_of_measurement: "°C"
+        state: "{{ (26 + (range(-15, 15) | random) / 10) | round(1) }}"
+        device_class: temperature
+      - name: "Bedroom 2 Temperature"
+        unit_of_measurement: "°C"
+        state: "{{ (27 + (range(-15, 15) | random) / 10) | round(1) }}"
+        device_class: temperature
+      - name: "Kitchen Temperature"
+        unit_of_measurement: "°C"
+        state: "{{ (30 + (range(-20, 30) | random) / 10) | round(1) }}"
+        device_class: temperature
+      - name: "Living Room Humidity"
+        unit_of_measurement: "%"
+        state: "{{ (55 + (range(-10, 10) | random)) }}"
+        device_class: humidity
+      - name: "Bedroom 1 Humidity"
+        unit_of_measurement: "%"
+        state: "{{ (50 + (range(-10, 10) | random)) }}"
+        device_class: humidity
+      - name: "Kitchen Humidity"
+        unit_of_measurement: "%"
+        state: "{{ (60 + (range(-15, 15) | random)) }}"
+        device_class: humidity
+      - name: "Kitchen Gas Level"
+        unit_of_measurement: "ppm"
+        state: "{{ (50 + (range(-20, 20) | random)) }}"
+        icon: mdi:gas-cylinder
+
+  - binary_sensor:
+      - name: "Living Room Motion"
+        state: "{{ false }}"
+        device_class: motion
+      - name: "Bedroom 1 Motion"
+        state: "{{ false }}"
+        device_class: motion
+      - name: "Kitchen Motion"
+        state: "{{ false }}"
+        device_class: motion
+      - name: "Entrance Motion"
+        state: "{{ false }}"
+        device_class: motion
+      - name: "Front Doorbell"
+        state: "{{ false }}"
+        device_class: occupancy
+        icon: mdi:doorbell-video
+      - name: "Front Door"
+        state: "{{ false }}"
+        device_class: door
+      - name: "Kitchen Window"
+        state: "{{ false }}"
+        device_class: window
+
+# ============================================
+# VIRTUAL DOOR LOCK
+# ============================================
+lock:
+  - platform: template
+    name: "Front Door Lock"
+    value_template: "{{ is_state('input_boolean.front_door_locked', 'on') }}"
+    lock:
+      service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.front_door_locked
+    unlock:
+      service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.front_door_locked
+
+# ============================================
+# AUTOMATIONS
+# ============================================
+automation:
+  - alias: "Gas Leak Alert"
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.kitchen_gas_level
+        above: 200
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "🚨 GAS LEAK DETECTED!"
+          message: "Kitchen gas level is {{ states('sensor.kitchen_gas_level') }} ppm!"
+
+  - alias: "Auto Geyser Off 30min"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.geyser
+        to: "on"
+        for:
+          minutes: 30
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.geyser
+      - service: persistent_notification.create
+        data:
+          title: "🚿 Geyser Auto-Off"
+          message: "Geyser turned off after 30 minutes."
+
+  - alias: "Night Mode 11PM"
+    trigger:
+      - platform: time
+        at: "23:00:00"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id:
+            - input_boolean.living_room_light_1
+            - input_boolean.living_room_light_2
+            - input_boolean.kitchen_light_1
+            - input_boolean.kitchen_light_2
+            - input_boolean.corridor_light
+            - input_boolean.balcony_light
+
+  - alias: "Auto Lock Door 30s"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.front_door_locked
+        to: "off"
+        for:
+          seconds: 30
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.front_door_locked
+      - service: persistent_notification.create
+        data:
+          title: "🔒 Door Auto-Locked"
+          message: "Front door auto-locked after 30 seconds."
+
+  - alias: "Morning Routine 6:30AM"
+    trigger:
+      - platform: time
+        at: "06:30:00"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id:
+            - input_boolean.kitchen_light_1
+            - input_boolean.corridor_light

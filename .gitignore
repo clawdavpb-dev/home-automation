@@ -1,0 +1,49 @@
+# Home Automation - Git Ignore File
+
+# Secrets and credentials
+homeassistant/secrets.yaml
+homeassistant/.storage/
+homeassistant/home-assistant.log*
+homeassistant/.cloud/
+homeassistant/.uuid
+
+# Database
+homeassistant/home-assistant_v2.db*
+homeassistant/*.db-shm
+homeassistant/*.db-wal
+
+# Cache and build artifacts
+homeassistant/.cache/
+esphome/.esphome/
+*.pyc
+__pycache__/
+
+# Logs
+mosquitto/log/*.log
+mosquitto/data/*.db
+homeassistant/deps/
+*.log
+
+# Backups (too large for git)
+backups/
+
+# Docker volumes
+homeassistant/tts/
+homeassistant/www/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Temporary files
+*.tmp
+tmp/
+temp/

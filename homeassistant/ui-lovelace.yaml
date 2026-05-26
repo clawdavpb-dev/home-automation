@@ -1,0 +1,297 @@
+title: "🏠 Aniket's Smart Home"
+views:
+  # ============================================
+  # HOME — Overview
+  # ============================================
+  - title: Home
+    path: home
+    icon: mdi:home
+    badges: []
+    cards:
+      # Security Status
+      - type: horizontal-stack
+        cards:
+          - type: entity
+            entity: lock.front_door_lock
+            name: Front Door
+            icon: mdi:door-closed-lock
+          - type: entity
+            entity: binary_sensor.front_doorbell
+            name: Doorbell
+          - type: entity
+            entity: binary_sensor.front_door
+            name: Door Sensor
+
+      # Quick toggles - All rooms
+      - type: entities
+        title: "⚡ Quick Controls"
+        show_header_toggle: true
+        entities:
+          - entity: input_boolean.living_room_light_1
+            name: Living Room
+          - entity: input_boolean.bedroom1_light
+            name: Bedroom 1
+          - entity: input_boolean.bedroom2_light
+            name: Bedroom 2
+          - entity: input_boolean.bedroom3_light
+            name: Bedroom 3
+          - entity: input_boolean.kitchen_light_1
+            name: Kitchen
+          - entity: input_boolean.porch_light
+            name: Porch
+          - entity: input_boolean.corridor_light
+            name: Corridor
+
+      # Climate overview
+      - type: glance
+        title: "🌡️ Climate"
+        entities:
+          - entity: sensor.living_room_temperature
+            name: Living
+          - entity: sensor.bedroom_1_temperature
+            name: Bed 1
+          - entity: sensor.bedroom_2_temperature
+            name: Bed 2
+          - entity: sensor.kitchen_temperature
+            name: Kitchen
+          - entity: sensor.kitchen_gas_level
+            name: Gas
+
+      # Motion sensors
+      - type: glance
+        title: "🚶 Motion"
+        entities:
+          - entity: binary_sensor.living_room_motion
+            name: Living
+          - entity: binary_sensor.bedroom_1_motion
+            name: Bed 1
+          - entity: binary_sensor.kitchen_motion
+            name: Kitchen
+          - entity: binary_sensor.entrance_motion
+            name: Entry
+
+  # ============================================
+  # LIVING ROOM
+  # ============================================
+  - title: Living Room
+    path: living-room
+    icon: mdi:sofa
+    cards:
+      - type: entities
+        title: "🛋️ Living Room Controls"
+        entities:
+          - entity: input_boolean.living_room_light_1
+            name: Main Light
+          - entity: input_boolean.living_room_light_2
+            name: Accent Light
+          - entity: input_boolean.living_room_fan
+            name: Ceiling Fan
+          - entity: input_boolean.living_room_tv
+            name: TV Plug
+
+      - type: horizontal-stack
+        cards:
+          - type: sensor
+            entity: sensor.living_room_temperature
+            name: Temperature
+            graph: line
+          - type: sensor
+            entity: sensor.living_room_humidity
+            name: Humidity
+            graph: line
+
+      - type: entity
+        entity: binary_sensor.living_room_motion
+        name: Motion Sensor
+
+  # ============================================
+  # BEDROOMS
+  # ============================================
+  - title: Bedrooms
+    path: bedrooms
+    icon: mdi:bed
+    cards:
+      # Bedroom 1
+      - type: entities
+        title: "🛏️ Bedroom 1"
+        entities:
+          - entity: input_boolean.bedroom1_light
+            name: Main Light
+          - entity: input_boolean.bedroom1_fan
+            name: Ceiling Fan
+          - entity: input_boolean.bedroom1_nightlamp
+            name: Night Lamp
+          - entity: input_boolean.bedroom1_ac
+            name: AC Plug
+          - entity: input_number.bedroom1_ac_temp
+            name: AC Target Temp
+
+      - type: horizontal-stack
+        cards:
+          - type: sensor
+            entity: sensor.bedroom_1_temperature
+            name: Temp
+            graph: line
+          - type: sensor
+            entity: sensor.bedroom_1_humidity
+            name: Humidity
+            graph: line
+
+      # Bedroom 2
+      - type: entities
+        title: "🛏️ Bedroom 2"
+        entities:
+          - entity: input_boolean.bedroom2_light
+            name: Main Light
+          - entity: input_boolean.bedroom2_fan
+            name: Ceiling Fan
+          - entity: input_boolean.bedroom2_nightlamp
+            name: Night Lamp
+          - entity: input_boolean.bedroom2_spare
+            name: Spare Outlet
+          - entity: input_number.bedroom2_ac_temp
+            name: AC Target Temp
+
+      # Bedroom 3
+      - type: entities
+        title: "🛏️ Bedroom 3"
+        entities:
+          - entity: input_boolean.bedroom3_light
+            name: Main Light
+          - entity: input_boolean.bedroom3_fan
+            name: Ceiling Fan
+          - entity: input_boolean.bedroom3_light2
+            name: Secondary Light
+          - entity: input_boolean.bedroom3_spare
+            name: Spare Outlet
+
+  # ============================================
+  # KITCHEN
+  # ============================================
+  - title: Kitchen
+    path: kitchen
+    icon: mdi:stove
+    cards:
+      - type: entities
+        title: "🍳 Kitchen Controls"
+        entities:
+          - entity: input_boolean.kitchen_light_1
+            name: Main Light
+          - entity: input_boolean.kitchen_light_2
+            name: Counter Light
+          - entity: input_boolean.kitchen_exhaust
+            name: Exhaust Fan
+          - entity: input_boolean.kitchen_spare
+            name: Spare Outlet
+
+      - type: horizontal-stack
+        cards:
+          - type: sensor
+            entity: sensor.kitchen_temperature
+            name: Temperature
+            graph: line
+          - type: sensor
+            entity: sensor.kitchen_humidity
+            name: Humidity
+            graph: line
+
+      - type: gauge
+        entity: sensor.kitchen_gas_level
+        name: "🔥 Gas Level"
+        min: 0
+        max: 300
+        severity:
+          green: 0
+          yellow: 100
+          red: 200
+
+      - type: entity
+        entity: binary_sensor.kitchen_window
+        name: Kitchen Window
+
+  # ============================================
+  # UTILITY & OTHER
+  # ============================================
+  - title: Utility
+    path: utility
+    icon: mdi:water-boiler
+    cards:
+      - type: entities
+        title: "🚿 Bathroom & Utility"
+        entities:
+          - entity: input_boolean.bathroom_light
+            name: Bathroom Light
+          - entity: input_boolean.geyser
+            name: Geyser (Auto-off 30 min)
+          - entity: input_boolean.utility_light
+            name: Utility Light
+          - entity: input_boolean.wash_area
+            name: Wash Area Light
+
+      - type: entities
+        title: "🏡 Entrance & Balcony"
+        entities:
+          - entity: input_boolean.porch_light
+            name: Porch Light
+          - entity: input_boolean.balcony_light
+            name: Balcony Light
+          - entity: input_boolean.corridor_light
+            name: Corridor Light
+
+  # ============================================
+  # SECURITY
+  # ============================================
+  - title: Security
+    path: security
+    icon: mdi:shield-home
+    cards:
+      - type: entities
+        title: "🔐 Door Lock"
+        entities:
+          - entity: lock.front_door_lock
+            name: Front Door Lock
+          - entity: binary_sensor.front_door
+            name: Door Sensor
+          - entity: binary_sensor.front_doorbell
+            name: Doorbell
+
+      - type: entities
+        title: "🚶 Motion Sensors"
+        entities:
+          - entity: binary_sensor.living_room_motion
+            name: Living Room
+          - entity: binary_sensor.bedroom_1_motion
+            name: Bedroom 1
+          - entity: binary_sensor.kitchen_motion
+            name: Kitchen
+          - entity: binary_sensor.entrance_motion
+            name: Entrance
+
+      - type: entities
+        title: "🚪 Door/Window Sensors"
+        entities:
+          - entity: binary_sensor.front_door
+            name: Front Door
+          - entity: binary_sensor.kitchen_window
+            name: Kitchen Window
+
+  # ============================================
+  # AUTOMATIONS
+  # ============================================
+  - title: Automations
+    path: automations
+    icon: mdi:robot
+    cards:
+      - type: entities
+        title: "🤖 Active Automations"
+        entities:
+          - entity: automation.gas_leak_alert
+            name: "🚨 Gas Leak Alert"
+          - entity: automation.auto_geyser_off_30min
+            name: "🚿 Geyser Auto-Off (30 min)"
+          - entity: automation.night_mode_11pm
+            name: "🌙 Night Mode (11 PM)"
+          - entity: automation.auto_lock_door_30s
+            name: "🔒 Auto-Lock Door (30 sec)"
+          - entity: automation.morning_routine_6_30am
+            name: "☀️ Morning Routine (6:30 AM)"
